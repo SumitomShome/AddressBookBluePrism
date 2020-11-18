@@ -1,0 +1,84 @@
+﻿<process name="UC4-SearchingByName" version="1.0" bpversion="6.9.0.26970" narrative="Object for storing and accessing address book" byrefcollection="true" type="object" runmode="Exclusive" preferredid="8a553f69-0af2-45eb-9109-74fe66664009">
+  <appdef>
+    <element name="Application Root">
+      <id>367f2908-f5ba-435f-86de-4c5194eb18ff</id>
+      <type>Application</type>
+      <basetype>Application</basetype>
+      <datatype>unknown</datatype>
+      <diagnose>False</diagnose>
+    </element>
+  </appdef>
+  <view>
+    <camerax>0</camerax>
+    <cameray>0</cameray>
+    <zoom version="2">1.25</zoom>
+  </view>
+  <preconditions />
+  <endpoint narrative="" />
+  <stage stageid="8e8fbac6-4e40-4486-839d-56ebbb4c4591" name="UC4-SearchingByName" type="SubSheetInfo">
+    <display x="-195" y="-105" w="150" h="90" />
+  </stage>
+  <stage stageid="d308eb3c-7229-45d6-b999-1b8b4a3aa732" name="Start" type="Start">
+    <loginhibit />
+    <display x="15" y="-105" />
+    <onsuccess>0a4dfd11-1d06-4188-b962-90ecd39c4cbf</onsuccess>
+  </stage>
+  <stage stageid="d9f61346-2e72-4bbe-971d-6ac8e5a11e48" name="End" type="End">
+    <loginhibit />
+    <display x="15" y="90" />
+  </stage>
+  <stage stageid="0a4dfd11-1d06-4188-b962-90ecd39c4cbf" name="Data - SQL Server::Set Connection" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="15" y="-30" />
+    <inputs>
+      <input type="text" name="Server" friendlyname="Server" narrative="The name of the server and, if necessary, instance name of the SQL Server instance to connect to" expr="&quot;(LocalDB)\BluePrismLocalDB&quot;" />
+      <input type="text" name="Database" friendlyname="Database" narrative="The name of the database to connect to" expr="&quot;addressbook_db&quot;" />
+      <input type="text" name="User" friendlyname="User" narrative="If appropriate, the login name to use to connect to SQL Server. If left empty, windows authentication using the current user will be used instead of SQL Server authentication" expr="" />
+      <input type="password" name="Password" friendlyname="Password" narrative="If appropriate, the password to use with the above login name to access SQL Server. Unused for windows authentication" expr="" />
+    </inputs>
+    <onsuccess>eb73b8b0-9413-46ff-8f32-a774ebe3dd88</onsuccess>
+    <resource object="Data - SQL Server" action="Set Connection" />
+  </stage>
+  <stage stageid="eb73b8b0-9413-46ff-8f32-a774ebe3dd88" name="Data - SQL Server::Get Collection" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="15" y="30" />
+    <inputs>
+      <input type="text" name="SQL" friendlyname="SQL" narrative="The SQL query to use to perform this action" expr="&quot;select * from addressbook_table where '&quot;&amp;[Data1.first_name]&amp;&quot;' = '&quot;&amp;[name]&amp;&quot;'&quot;&#xA;" />
+    </inputs>
+    <outputs>
+      <output type="flag" name="Success" friendlyname="Success" narrative="Flag indicating success (True) or failure (False)" stage="Success" />
+      <output type="text" name="Message" friendlyname="Message" narrative="Error message giving detail regarding why this action failed" stage="Message" />
+      <output type="collection" name="Results" friendlyname="Results" narrative="The collection of results from the query" stage="Result" />
+    </outputs>
+    <onsuccess>d9f61346-2e72-4bbe-971d-6ac8e5a11e48</onsuccess>
+    <resource object="Data - SQL Server" action="Get Collection" />
+  </stage>
+  <stage stageid="fd55e92b-1bb5-49e1-bb9a-7982dc1ff4c7" name="Success" type="Data">
+    <display x="165" y="-75" />
+    <datatype>flag</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="f0821db3-8d87-4a9e-ae94-3518c490454d" name="Message" type="Data">
+    <display x="180" y="-135" />
+    <datatype>text</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="04ac518c-e735-4150-9956-927d0b4da0b7" name="Result" type="Collection">
+    <display x="150" y="-30" />
+    <datatype>collection</datatype>
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="add983a5-7892-4be1-b851-c05b26be29f2" name="name" type="Data">
+    <loginhibit />
+    <display x="150" y="30" />
+    <datatype>text</datatype>
+    <initialvalue xml:space="preserve">"Sumitom"</initialvalue>
+    <private />
+    <alwaysinit />
+  </stage>
+</process>
