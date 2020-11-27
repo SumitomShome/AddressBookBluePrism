@@ -1,0 +1,221 @@
+﻿<process name="SendingEmail" version="1.0" bpversion="6.9.0.26970" narrative="Object for storing and accessing address book" byrefcollection="true" type="object" runmode="Exclusive" preferredid="8a553f69-0af2-45eb-9109-74fe66664009">
+  <appdef>
+    <element name="Application Root">
+      <id>367f2908-f5ba-435f-86de-4c5194eb18ff</id>
+      <type>Application</type>
+      <basetype>Application</basetype>
+      <datatype>unknown</datatype>
+      <diagnose>False</diagnose>
+    </element>
+  </appdef>
+  <view>
+    <camerax>0</camerax>
+    <cameray>0</cameray>
+    <zoom version="2">1.25</zoom>
+  </view>
+  <preconditions />
+  <endpoint narrative="" />
+  <stage stageid="3b8c97ba-172b-43e2-a26f-425f0d8e566f" name="SendingEmail" type="SubSheetInfo">
+    <display x="-195" y="-105" w="150" h="90" />
+  </stage>
+  <stage stageid="2e77dcdd-fbad-49ca-a835-4ed1a8d5500a" name="Start" type="Start">
+    <loginhibit />
+    <display x="15" y="-150" />
+    <onsuccess>6a26837a-3c93-442b-a7ec-bc20d04b92b0</onsuccess>
+  </stage>
+  <stage stageid="e4fa06ee-ebce-4558-b30a-6484ba167dad" name="End" type="End">
+    <loginhibit />
+    <display x="15" y="210" />
+  </stage>
+  <stage stageid="5e06ba9a-35fe-4ef5-b812-caf0803aaedc" name="handle1" type="Data">
+    <display x="195" y="-150" />
+    <datatype>number</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="7427b6fd-c880-4730-bfa7-b69e37f4fb01" name="Workbook Name3" type="Data">
+    <display x="285" y="-150" />
+    <datatype>text</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="dbf72df4-5500-4894-bcd6-a65571fbcd61" name="Email - POP3/SMTP::Configure" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="15" y="120" />
+    <inputs>
+      <input type="text" name="Username" friendlyname="Username" narrative="The POP3 and SMTP Username" expr="[Username]" />
+      <input type="password" name="Password" friendlyname="Password" narrative="The POP3 and SMTP Password" expr="[Password]" />
+      <input type="text" name="POP3 Server" friendlyname="POP3 Server" narrative="The POP3 Server address e.g. pop.domain.com" expr="&quot;pop.gmail.com&quot;" />
+      <input type="text" name="SMTP Server" friendlyname="SMTP Server" narrative="The SMTP Server address e.g. smtp.domain.com" expr="&quot;smtp.gmail.com&quot;" />
+      <input type="number" name="POP3 Port" friendlyname="POP3 Port" narrative="The POP3 Port, e.g. 110 or 995" expr="995" />
+      <input type="number" name="SMTP Port" friendlyname="SMTP Port" narrative="The SMTP Port, e.g 25 or 465" expr="587" />
+      <input type="flag" name="POP3 UseSSL" friendlyname="POP3 UseSSL" narrative="Whether to use SSL for POP3" expr="True" />
+      <input type="flag" name="SMTP UseSSL" friendlyname="SMTP UseSSL" narrative="Whether to use SSL for SMTP" expr="True" />
+    </inputs>
+    <onsuccess>0abe9264-4782-4570-a7ee-cdc399e0199d</onsuccess>
+    <resource object="Email - POP3/SMTP" action="Configure" />
+  </stage>
+  <stage stageid="6a26837a-3c93-442b-a7ec-bc20d04b92b0" name="Credentials::Get" type="Action">
+    <loginhibit onsuccess="true" />
+    <narrative>Get the specified set of credentials.
+
+An Exception will occur if access to the credentials is not allowed, based on the running Resource, Process and User.</narrative>
+    <display x="15" y="-105" w="90" h="30" />
+    <inputs>
+      <input type="text" name="Credentials Name" friendlyname="Credentials Name" narrative="The name of the credentials to get" expr="&quot;EmailCredentials&quot;" />
+    </inputs>
+    <outputs>
+      <output type="password" name="Password" friendlyname="Password" narrative="The password" stage="Password" />
+      <output type="text" name="Username" friendlyname="Username" narrative="The user name" stage="Username" />
+      <output type="date" name="Expiry Date" friendlyname="Expiry Date" narrative="The expiry date" stage="Expiry Date" />
+      <output type="text" name="Status" friendlyname="Status" narrative="The status" stage="Status" />
+    </outputs>
+    <onsuccess>4c16b860-a5b9-4d17-9a7c-b325fb74f722</onsuccess>
+    <resource object="Blueprism.Automate.clsCredentialsActions" action="Get" />
+  </stage>
+  <stage stageid="0abe9264-4782-4570-a7ee-cdc399e0199d" name="Getting attachment path" type="Calculation">
+    <loginhibit />
+    <display x="120" y="120" />
+    <onsuccess>b3f2c616-2a52-416b-8a03-24aaa303c3bf</onsuccess>
+    <calculation expression="[Attachment.Path]" stage="StoreAttachment" />
+  </stage>
+  <stage stageid="6d70bee5-37ad-4267-b6b7-d1f4b0eb95ab" name="Attachment" type="Collection">
+    <loginhibit />
+    <display x="195" y="-90" />
+    <datatype>collection</datatype>
+    <alwaysinit />
+    <collectioninfo>
+      <field name="Path" type="text" />
+    </collectioninfo>
+    <initialvalue>
+      <row>
+        <field name="Path" type="text" value="G:\Capgemini\EmailSalary\Dummy salary slip.png" />
+      </row>
+    </initialvalue>
+  </stage>
+  <stage stageid="b3f2c616-2a52-416b-8a03-24aaa303c3bf" name="Set recipient mail" type="Calculation">
+    <loginhibit />
+    <display x="120" y="165" />
+    <onsuccess>eb94b9ed-a8cc-4787-b526-b5e47645c286</onsuccess>
+    <calculation expression="[Result2.email]" stage="EmailOfReciever" />
+  </stage>
+  <stage stageid="63bcf038-1cb2-4e57-940e-5eccf37c794a" name="Recipient email" type="Data">
+    <loginhibit />
+    <display x="-285" y="15" />
+    <datatype>text</datatype>
+    <initialvalue xml:space="preserve">sumitomshome@gmail.com</initialvalue>
+    <alwaysinit />
+  </stage>
+  <stage stageid="33362754-11d8-4a5e-828a-a661f0291902" name="EmailOfReciever" type="Data">
+    <display x="270" y="-90" />
+    <datatype>text</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="56abd15c-c219-454f-9574-fa5303c1093e" name="StoreAttachment" type="Data">
+    <display x="120" y="-150" />
+    <datatype>text</datatype>
+    <initialvalue xml:space="preserve">"G:\Capgemini\EmailSalary\Dummy salary slip.png"</initialvalue>
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="eb94b9ed-a8cc-4787-b526-b5e47645c286" name="Email - POP3/SMTP::Send Message" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="120" y="210" />
+    <inputs>
+      <input type="text" name="From" friendlyname="From" narrative="The email address of the sender." expr="[Username]" />
+      <input type="text" name="To" friendlyname="To" narrative="The email address of the recipient. To address multiple recipients use the format &quot;john.smith@example.com, henry.jones@example.com&quot; OR &quot;John Smith &lt;john.smith@example.com&gt;, Henry Jones &lt;henry.jones@example.com&gt;&quot;." expr="[EmailOfReciever]" />
+      <input type="text" name="Subject" friendlyname="Subject" narrative="The subject of the email." expr="&quot;Address Book Blue Prism&quot;" />
+      <input type="text" name="Body" friendlyname="Body" narrative="The body of the email." expr="&quot;Welcome to address book excel sheet&quot;" />
+      <input type="collection" name="Attachments" friendlyname="Attachments" narrative="A Collection containing a list of files to add to the email as attachments." expr="[Attachment]" />
+      <input type="flag" name="BodyIsHTML" friendlyname="BodyIsHTML" narrative="Indicates if the body should be sent as HTML" expr="True" />
+    </inputs>
+    <onsuccess>e4fa06ee-ebce-4558-b30a-6484ba167dad</onsuccess>
+    <resource object="Email - POP3/SMTP" action="Send Message" />
+  </stage>
+  <stage stageid="13f7dea6-da0f-40d4-b10e-83cbb495284d" name="Password" type="Data">
+    <display x="-255" y="150" />
+    <datatype>password</datatype>
+    <initialvalueenc>
+    </initialvalueenc>
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="c5ed5c18-7f34-4df2-b61d-3ab25eb7fb8d" name="Username" type="Data">
+    <display x="-240" y="105" />
+    <datatype>text</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="4c16b860-a5b9-4d17-9a7c-b325fb74f722" name="Data - SQL Server::Set Connection" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="15" y="-60" />
+    <inputs>
+      <input type="text" name="Server" friendlyname="Server" narrative="The name of the server and, if necessary, instance name of the SQL Server instance to connect to" expr="&quot;(LocalDB)\BluePrismLocalDB&quot;" />
+      <input type="text" name="Database" friendlyname="Database" narrative="The name of the database to connect to" expr="&quot;addressbook_db&quot;" />
+      <input type="text" name="User" friendlyname="User" narrative="If appropriate, the login name to use to connect to SQL Server. If left empty, windows authentication using the current user will be used instead of SQL Server authentication" expr="" />
+      <input type="password" name="Password" friendlyname="Password" narrative="If appropriate, the password to use with the above login name to access SQL Server. Unused for windows authentication" expr="" />
+    </inputs>
+    <onsuccess>38c19244-e02d-4439-8060-b146b3517bd6</onsuccess>
+    <resource object="Data - SQL Server" action="Set Connection" />
+  </stage>
+  <stage stageid="e66c07a0-6e05-4c4c-a810-1faf31e09d58" name="Expiry Date" type="Data">
+    <display x="-225" y="60" />
+    <datatype>date</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="f24deb12-8ea0-436a-81ef-54bfbbcfc1bc" name="Status" type="Data">
+    <display x="-195" y="15" />
+    <datatype>text</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="48d1c810-27fc-4283-9b20-8dbcb7ffc55e" name="Success" type="Data">
+    <display x="-60" y="-15" />
+    <datatype>flag</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="9941fc91-5915-4ea2-ad93-cdb9c4271420" name="Message" type="Data">
+    <display x="360" y="-150" />
+    <datatype>text</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="38c19244-e02d-4439-8060-b146b3517bd6" name="Data - SQL Server::Get Collection" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="15" y="15" />
+    <inputs>
+      <input type="text" name="SQL" friendlyname="SQL" narrative="The SQL query to use to perform this action" expr="&quot;SELECT email FROM addressbook_table WHERE first_name = 'Tom';&quot;" />
+    </inputs>
+    <outputs>
+      <output type="flag" name="Success" friendlyname="Success" narrative="Flag indicating success (True) or failure (False)" stage="Success" />
+      <output type="text" name="Message" friendlyname="Message" narrative="Error message giving detail regarding why this action failed" stage="Message" />
+      <output type="collection" name="Results" friendlyname="Results" narrative="The collection of results from the query" stage="Result2" />
+    </outputs>
+    <onsuccess>dbf72df4-5500-4894-bcd6-a65571fbcd61</onsuccess>
+    <resource object="Data - SQL Server" action="Get Collection" />
+  </stage>
+  <stage stageid="66ec06ea-0d19-44a5-be04-f50df7763329" name="Result2" type="Collection">
+    <display x="450" y="-150" />
+    <datatype>collection</datatype>
+    <alwaysinit />
+    <collectioninfo>
+      <field name="email" type="text" />
+    </collectioninfo>
+    <initialvalue>
+      <row>
+        <field name="email" type="text" value="sumitomshome@gmail.com" />
+      </row>
+    </initialvalue>
+  </stage>
+</process>
